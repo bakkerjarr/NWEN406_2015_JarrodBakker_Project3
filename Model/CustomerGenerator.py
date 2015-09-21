@@ -1,28 +1,35 @@
 #
 # Generate customers using an Exponential distribution with lambda set
-# to ft.
+# to rate. Once generated, a customer joins a queue for a check-in
+# counter.
 #
 
 from Customer import Customer
 import random
+import simpy
 
 
 class CustomerGenerator:
 
     """
-    @param rate - parameter for the exponential distribution.
+    :param rate - parameter for the exponential distribution.
     """
-    def __init__(self, env, rate, max_cust):
-        random.seed(999)
-        self.env = env
-        self.rate = rate
-        self.max_cust = max_cust
+    def __init__(self, env, rate, max_cust, num_check_in, rand_seed):
+        random.seed(rand_seed)
+        self._env = env
+        self._rate = rate
+        self._max_cust = max_cust
+
+        # Create the check-in counters
+        self._check_in_counters = []
+        for i in range(num_check_in):
+            self._check_in_counters.append(simpy.Resource(self._env))
 
     """
     Use a uniformly distributed random number in the range [0.0, 1.0)
     to work out the number of bags that a customer is checking in.
 
-    @return - the number of bags.
+    :return - the number of bags.
     """
     def _calc_bags(self):
         prob = random.random()
@@ -46,10 +53,10 @@ class CustomerGenerator:
 
     def source(self):
         num_cust = 0
-        for i in range(self.max_cust):
+        for i in range(self._max_cust):
             num_bags = self._calc_bags()
-            cust = Customer(self.env, str(num_cust), num_bags)
-            self.env.process(cust.process())
+            cust = Customer(self._env, str(num_cust), num_bags)
+            self._env.process(cust.process(self._check_in_counters))
             num_cust += 1
-            interarrival_time = random.expovariate(1.0/self.rate)
-            yield self.env.timeout(interarrival_time)
+            interarrival_time = random.expovariate(1.0/self._rate)
+            yield self._env.timeout(interarrival_time)
