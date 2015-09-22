@@ -6,7 +6,6 @@
 
 from Customer import Customer
 import random
-import simpy
 
 
 class CustomerGenerator:
@@ -22,6 +21,11 @@ class CustomerGenerator:
     :param rate - parameter for the exponential distribution.
     :param max_cust - maximum number of customers that will be simulated.
     :param num_check_in - number of check-in counters.
+    :param equipment_area_queue - bags are queued here so that they
+                                  may be loaded onto their appropriate
+                                  planes.
+    :param security_check_queue - bags are queued here before
+                                  receiving the additional check.
     :param rand_seed - seed for the pseudorandom number generator.
     """
     def __init__(self, env, rate, max_cust, check_in_counters,
@@ -65,13 +69,11 @@ class CustomerGenerator:
     times.
     """
     def source(self):
-        num_cust = 0
-        for i in range(self._max_cust):
+        for i in range(1, self._max_cust+1):
             num_bags = self._calc_bags()
-            cust = Customer(self._env, str(num_cust), num_bags, random)
+            cust = Customer(self._env, str(i), num_bags, random)
             self._env.process(cust.process(self._check_in_counters,
                                            self._equipment_area_queue,
                                            self._secuirty_check_queue))
-            num_cust += 1
             interarrival_time = random.expovariate(1.0/self._rate)
             yield self._env.timeout(interarrival_time)
