@@ -26,6 +26,9 @@ class Bag:
     _PROB_FAIL_XRAY1 = 0.1
     _PROB_FAIL_XRAY2 = 0.03
 
+    _QUEUE_SERV_MU_EQUIP_AREA = 0.076
+    _QUEUE_SERV_MU_SECURITY_CHECK = 0.25
+
     """
     Initialise a bag.
 
@@ -40,27 +43,43 @@ class Bag:
         self._random = random
 
     """
-    Give a bag an additional security check.
+    Queue the bag for an additional security check.
 
-    :return - True if the bag passed, False otherwise.
+    :param security_check_queue - bags are queued here before
+                                  receiving the additional check.
     """
-    def _security_check(self):
-        pass
-        # Bag gets scanned
+    def _security_check(self, security_check_queue):
+        print("[Bag "+self._bag_id+"] queued for security check.")
+        request = security_check_queue.request()
+        yield request
+        service_time = self._random.expovariate(
+            self._QUEUE_SERV_MU_SECURITY_CHECK)
+        yield self._env.timeout(service_time)
+        security_check_queue.release(request)
 
-        prob = self._random.random()
-        if prob < self._PROB_FAIL_XRAY2:
-            # Bag fails check
-            return False
-        else:
-            # Bag passes check
-            return True
+    """
+    Queue the bag in the equipment area so that it may be loaded onto
+    its appropriate plane.
+
+    :param equiptment_area_queue - bags are queued here so that they
+                                   may be loaded onto their appropriate
+                                   planes.
+    """
+    def _equipment_area(self, equipment_area_queue):
+        print("[Bag "+self._bag_id+"] queued for loading onto plane.")
+        request = equipment_area_queue.request()
+        yield request
+        service_time = self._random.expovariate(
+            self._QUEUE_SERV_MU_EQUIP_AREA)
+        yield self._env.timeout(service_time)
+        equipment_area_queue.release(request)
 
     """
     Process the bag in the simulation.
     """
-    def process(self):
-        pass
+    # TODO - have the queuing actions in the functions notated above
+    #        if possible. It doesn't seem to work with them currently.
+    def process(self, equipment_area_queue, security_check_queue):
         # Bag travels to decision point where it might receive an
         # additional security check.
         yield self._env.timeout(
@@ -70,15 +89,35 @@ class Bag:
         if prob < self._PROB_FAIL_XRAY1:
             # Looks like this bag requires an extra check.
             yield(self._env.timeout(self._CONVEYOR_TIME_SECURITY_CHECK))
-            result = self._security_check()
-            if not result:
+            # Queue the bag
+            print("[Bag "+self._bag_id+"] queued for security check.")
+            request = security_check_queue.request()
+            yield request
+            service_time = self._random.expovariate(
+                self._QUEUE_SERV_MU_SECURITY_CHECK)
+            yield self._env.timeout(service_time)
+            security_check_queue.release(request)
+            print("[Bag "+self._bag_id+"] security check complete.")
+            ######self._security_check(security_check_queue)
+            # Scan the bag
+            prob = self._random.random()
+            if prob < self._PROB_FAIL_XRAY2:
                 # Bag leaves the system as it didn't pass the additional
                 # check.
+                print("[Bag "+self._bag_id+"] security check failed.")
                 return
-            # else: The bag passed the check! It travels back to the
-            # main conveyor.
+            # else: Bag passes check. It travels back to the main
+            #       conveyor.
             yield(self._env.timeout(self._CONVEYOR_TIME_SECURITY_CHECK))
-
         # Bag travels to the equipment area to be loaded onto a plane.
         yield self._env.timeout(
             self._CONVEYOR_TIME_DECISION_POINT_EQUIP_AREA)
+        print("[Bag "+self._bag_id+"] queued for loading onto plane.")
+        request = equipment_area_queue.request()
+        yield request
+        service_time = self._random.expovariate(
+            self._QUEUE_SERV_MU_EQUIP_AREA)
+        yield self._env.timeout(service_time)
+        equipment_area_queue.release(request)
+        print("[Bag "+self._bag_id+"] loaded onto plane.")
+        ######self._equipment_area(equipment_area_queue)

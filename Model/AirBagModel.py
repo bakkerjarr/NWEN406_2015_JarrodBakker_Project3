@@ -35,19 +35,29 @@ class Model:
         self._env = simpy.Environment()
         #self._env = simpy.rt.RealtimeEnvironment(factor=1.0)
 
+        # Create the necessary queues
+        self._check_in_counters = []
+        for i in range(num_check_in):
+            self._check_in_counters.append(simpy.Resource(self._env))
+        self._equipment_area_queue = simpy.Resource(self._env)
+        self._security_check_queue = simpy.Resource(self._env)
+
     """
     Start the model.
     """
     def start_simulation(self):
         c_gen = CustomerGenerator(self._env, self._arrival_rate,
-                                  self._max_cust, self._num_check_in,
+                                  self._max_cust,
+                                  self._check_in_counters,
+                                  self._equipment_area_queue,
+                                  self._security_check_queue,
                                   self._rand_seed)
         self._env.process(c_gen.source())
         self._env.run()
 
 
 if __name__ == "__main__":
-    # TODO Get CLI arguments
+    # TODO - Get CLI arguments
     arrival_rate = 5
     max_cust = 20
     num_check_in = 7
