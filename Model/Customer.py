@@ -10,12 +10,18 @@
 class Customer:
 
     """
+    Initialise a customer.
+
+    :param env - SimPy environment.
     :param id - identifier of a customer.
+    :param num_bags - number of bags that this customer is checking in.
+    :param random - pseudorandom number generator used by the model.
     """
-    def __init__(self, env, id, num_bags):
+    def __init__(self, env, id, num_bags, random):
         self._env = env
         self._cust_id = id
         self._num_bags = num_bags
+        self._random = random
 
     """
     Determine the number of customers currently in a check-in queue.
@@ -36,7 +42,7 @@ class Customer:
         return 30 + 15*self._num_bags
 
     """
-    Process the customer in the Simulation.
+    Process the customer in the simulation.
 
     :param check_in_counters - a list of queues that a customer can join.
     """
