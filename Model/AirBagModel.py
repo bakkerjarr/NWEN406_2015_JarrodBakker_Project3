@@ -31,6 +31,7 @@ class Model:
         self._num_check_in = num_check_in
         self._rand_seed = rand_seed
 
+        # Initialise the SimPy environment
         self._env = simpy.Environment()
         #self._env = simpy.rt.RealtimeEnvironment(factor=1.0)
 
@@ -39,7 +40,7 @@ class Model:
     """
     def start_simulation(self):
         c_gen = CustomerGenerator(self._env, self._arrival_rate,
-                                  self._max_cust, num_check_in,
+                                  self._max_cust, self._num_check_in,
                                   self._rand_seed)
         self._env.process(c_gen.source())
         self._env.run()
