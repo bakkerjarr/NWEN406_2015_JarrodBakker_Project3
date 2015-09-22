@@ -31,7 +31,7 @@ class Model:
     :param max_cust - maximum number of customers that will be simulated.
     :param num_check_in - number of check-in counters.
     :param rand_seed - seed for the pseudorandom number generator.
-    :param time_facotr - scaling factor for real-time simluation.
+    :param time_factor - scaling factor for real-time simluation.
     """
     def __init__(self, arrival_rate, max_cust, num_check_in,
                  rand_seed, time_factor):
@@ -88,6 +88,6 @@ if __name__ == "__main__":
     print("[!] Starting simulation.\n\tTotal number of customers: {0}"
           "\n\tNumber of check-in counters: {1}\n\tTime scaling "
           "factor: {2}\n").format(args.max_cust, args.num_check_in,
-                                args.time_factor)
+                                  args.time_factor)
     m.start_simulation()
     print("\n[!] Simulation complete.")
