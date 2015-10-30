@@ -42,7 +42,10 @@ class Model:
         self._rand_seed = rand_seed
 
         # Initialise the SimPy environment
-        self._env = simpy.rt.RealtimeEnvironment(factor=time_factor)
+        # As API calls are made we don't want the timing to be too
+        # strict otherwise the environment will complain.
+        self._env = simpy.rt.RealtimeEnvironment(factor=time_factor,
+                                                 strict=False)
 
         # Create the necessary queues
         self._check_in_counters = []

@@ -18,6 +18,8 @@ __author__ = 'Jarrod N. Bakker'
 # reduce overhead.
 #
 
+from API.AirBagAPI import AirBagAPI
+
 
 class Bag:
 
@@ -43,8 +45,9 @@ class Bag:
         self._env = env
         self._bag_id = str(cust_id) + "-" + str(bag_num)
         self._random = random
-        # TODO: create bag object at server. Location: check-in.
-        # Status: created.
+
+        AirBagAPI().bag_enter_system(self._bag_id, "check-in",
+                                     "checked in",  "20")
 
     """
     Queue the bag for an additional security check.
@@ -56,6 +59,10 @@ class Bag:
         print("[Bag "+self._bag_id+"] queued for security check.")
         request = security_check_queue.request()
         # TODO: queue size has changed so update the cloud [on service]
+
+        AirBagAPI().bag_update_loc_status(self._bag_id, "sec. scan 2",
+                                          "waiting for sec. scan 2")
+
         yield request
         service_time = self._random.expovariate(
             self._QUEUE_SERV_MU_SECURITY_CHECK)
@@ -76,6 +83,9 @@ class Bag:
         print("[Bag "+self._bag_id+"] queued for loading.")
         request = equipment_area_queue.request()
         # TODO: queue size has changed so update the cloud [on equip]
+
+        AirBagAPI().bag_update_loc_status(self._bag_id, "loading bay",
+                                          "waiting for loading")
         yield request
         service_time = self._random.expovariate(
             self._QUEUE_SERV_MU_EQUIP_AREA)
@@ -83,6 +93,8 @@ class Bag:
         equipment_area_queue.release(request)
         # TODO: queue size has changed so update the cloud [off equip]
         print("[Bag "+self._bag_id+"] en route to plane.")
+        AirBagAPI().bag_update_loc_status(self._bag_id, "plane",
+                                          "delivered to plane")
 
     """
     Process the bag in the simulation.
@@ -97,7 +109,10 @@ class Bag:
         # Bag travels to decision point where it might receive an
         # additional security check.
         print("[Bag "+self._bag_id+"] on conveyor from check-in.")
-        # TODO: update bag location and status. Location: conveyor.
+
+        AirBagAPI().bag_update_loc_status(self._bag_id, "conveyor",
+                                          "waiting for sec. scan 1")
+
         # Status: en route to first security check.
         yield self._env.timeout(
             self._CONVEYOR_TIME_CHECK_IN_DECISION_POINT)
@@ -106,7 +121,10 @@ class Bag:
         if prob < self._PROB_FAIL_XRAY1:
             # Looks like this bag requires an extra security check,
             # transport it to the appropriate area.
-            # TODO: update bag location and status. Location: conveyor.
+
+            AirBagAPI().bag_update_loc_status(self._bag_id, "conveyor",
+                                              "failed sec. check 1")
+
             # Status: en route to second security check.
             yield(self._env.timeout(self._CONVEYOR_TIME_SECURITY_CHECK))
 
@@ -118,14 +136,20 @@ class Bag:
             if prob < self._PROB_FAIL_XRAY2:
                 # Bag leaves the system as it didn't pass the additional
                 # check.
+                AirBagAPI().bag_update_loc_status(self._bag_id, "sec. scan 2",
+                                                  "failed sec. scan 2")
                 print("[Bag "+self._bag_id+"] security check failed.")
                 return
 
             # else: Bag passed the check. It travels back to the main
             #       conveyor.
+            AirBagAPI().bag_update_loc_status(self._bag_id, "conveyor",
+                                              "passed sec. check 2")
             yield(self._env.timeout(self._CONVEYOR_TIME_SECURITY_CHECK))
 
         # Bag travels to the equipment area to be loaded onto a plane.
+        AirBagAPI().bag_update_loc_status(self._bag_id, "conveyor",
+                                          "to loading bay")
         yield self._env.timeout(
             self._CONVEYOR_TIME_DECISION_POINT_EQUIP_AREA)
 
