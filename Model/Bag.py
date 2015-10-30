@@ -41,6 +41,8 @@ class Bag:
         self._env = env
         self._bag_id = str(cust_id) + "-" + str(bag_num)
         self._random = random
+        # TODO: create bag object at server. Location: check-in.
+        # Status: created.
 
     """
     Queue the bag for an additional security check.
@@ -51,11 +53,13 @@ class Bag:
     def _security_check(self, security_check_queue):
         print("[Bag "+self._bag_id+"] queued for security check.")
         request = security_check_queue.request()
+        # TODO: queue size has changed so update the cloud [on service]
         yield request
         service_time = self._random.expovariate(
             self._QUEUE_SERV_MU_SECURITY_CHECK)
         yield self._env.timeout(service_time)
         security_check_queue.release(request)
+        # TODO: queue size has changed so update the cloud [off service]
         print("[Bag "+self._bag_id+"] security check complete.")
 
     """
@@ -69,11 +73,13 @@ class Bag:
     def _equipment_area(self, equipment_area_queue):
         print("[Bag "+self._bag_id+"] queued for loading.")
         request = equipment_area_queue.request()
+        # TODO: queue size has changed so update the cloud [on equip]
         yield request
         service_time = self._random.expovariate(
             self._QUEUE_SERV_MU_EQUIP_AREA)
         yield self._env.timeout(service_time)
         equipment_area_queue.release(request)
+        # TODO: queue size has changed so update the cloud [off equip]
         print("[Bag "+self._bag_id+"] en route to plane.")
 
     """
@@ -89,6 +95,8 @@ class Bag:
         # Bag travels to decision point where it might receive an
         # additional security check.
         print("[Bag "+self._bag_id+"] on conveyor from check-in.")
+        # TODO: update bag location and status. Location: conveyor.
+        # Status: en route to first security check.
         yield self._env.timeout(
             self._CONVEYOR_TIME_CHECK_IN_DECISION_POINT)
 
@@ -96,6 +104,8 @@ class Bag:
         if prob < self._PROB_FAIL_XRAY1:
             # Looks like this bag requires an extra security check,
             # transport it to the appropriate area.
+            # TODO: update bag location and status. Location: conveyor.
+            # Status: en route to second security check.
             yield(self._env.timeout(self._CONVEYOR_TIME_SECURITY_CHECK))
 
             # Queue the bag for scanning

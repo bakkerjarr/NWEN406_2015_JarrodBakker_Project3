@@ -49,6 +49,7 @@ class Model:
             self._check_in_counters.append(simpy.Resource(self._env))
         self._equipment_area_queue = simpy.Resource(self._env)
         self._security_check_queue = simpy.Resource(self._env)
+        # TODO: create queue object in server
 
     """
     Start the model.
