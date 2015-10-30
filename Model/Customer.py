@@ -1,3 +1,5 @@
+__author__ = 'Jarrod N. Bakker'
+
 #
 # Describes that actions that a customer makes while part of the
 # system. A customer brings 0 to 5 bags with them to be processed at

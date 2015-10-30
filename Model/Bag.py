@@ -1,3 +1,5 @@
+__author__ = 'Jarrod N. Bakker'
+
 #
 # Describes the actions that are performed upon a bag while it is in
 # the system. The bag moves along a conveyor and gets processed at

@@ -1,3 +1,5 @@
+__author__ = 'Jarrod N. Bakker'
+
 #
 # Generate customers using an Exponential distribution with lambda set
 # to rate. Once generated, a customer joins a queue for a check-in

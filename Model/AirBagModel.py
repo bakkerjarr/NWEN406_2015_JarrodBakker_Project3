@@ -1,3 +1,4 @@
+__author__ = 'Jarrod N. Bakker'
 #
 # A model of an airport baggage handling system. This model is based
 # off of a model found noted in the paper Riga Airport Baggage Handling
