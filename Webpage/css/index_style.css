@@ -1,0 +1,23 @@
+aside {
+    line-height:30px;
+    background-color:#c4c4c4;
+    height:auto;
+    width:290px;
+    float:left;
+    padding-left:10px;
+}
+
+#diagram_heading {
+    text-align: center;
+}
+
+header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+
+html * {
+    font-family: Helvetica, serif;
+}
