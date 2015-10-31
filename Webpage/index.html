@@ -5,7 +5,6 @@
     <title>AirBag - Incoming Bags</title>
 
     <link rel="stylesheet" href="css/index_style.css">
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 </head>
 <body>
 
@@ -25,7 +24,19 @@
     <div id="diagram_heading">
         <h2>Check-in Conveyor</h2>
     </div>
-
+    <svg width="1000px" height="450px">
+        <!-- Draw lines that represent the conveyor lines -->
+        <line x1="450" y1="80" x2="850" y2="80" id="conveyor_line"/>
+        <line x1="450" y1="81" x2="450" y2="0" id="conveyor_line"/>
+        <line x1="300" y1="1" x2="450" y2="1" id="conveyor_line"/>
+        <line x1="300" y1="0" x2="300" y2="240" id="conveyor_line"/>
+        <line x1="200" y1="80" x2="300" y2="80" id="conveyor_line"/>
+        <!-- Draw the loading area for bags -->
+        <rect x="275" y="240" width="50" height="50"
+              id="loading_zone"/>
+        <rect x="150" y="55" width="50" height="50"
+              id="sec_check_2"/>
+    </svg>
 </section>
 
 </body>
