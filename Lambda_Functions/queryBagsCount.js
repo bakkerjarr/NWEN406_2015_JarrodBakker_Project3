@@ -8,16 +8,20 @@ exports.handler = function(event, context) {
 
     var tableName = "AirportBaggage-Bags";
 
-    /* If no json was passed then return the total number of bags
-     * (i.e. table size).
-     */
-    /* Check if a status has been provided if the location is sec. area 2,
-     * as the application may be asking for the number of bags that have
-     * failed the second check.
-     */
-     /* Otherwise just use what is below. */
-
-    dynamodb.query({
+    if (event.bag_status == "failed sec. scan 2") {
+        var db_query = {
+            "TableName": tableName,
+            "IndexName": "status-index",
+            "KeyConditions": {
+                "status": {
+                    "ComparisonOperator": "EQ",
+                    "AttributeValueList": [{"S": event.bag_status}]
+                }
+            },
+            "Select": "COUNT"
+        };
+    } else {
+        var db_query = {
             "TableName": tableName,
             "IndexName": "location-index",
             "KeyConditions": {
@@ -26,13 +30,17 @@ exports.handler = function(event, context) {
                     "AttributeValueList": [{"S": event.bag_location}]
                 }
             },
-            "Select": "COUNT" // ??????
-        }, function(err, data) {
+            "Select": "COUNT"
+        };
+    }
+
+    dynamodb.query(db_query,
+        function(err, data) {
             if (err) {
                 context.fail('[ERROR] Query bag list: Dynamo failed: ' + err);
             } else {
                 console.log('Dynamo Success: ' + JSON.stringify(data, null, '  '));
-                context.succeed('[SUCCESS] Query bag list');
+                context.succeed('{\"count\":' + '\"' + data.Count + '\"}');
             }
         });
-}
+};

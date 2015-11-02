@@ -8,23 +8,15 @@ exports.handler = function(event, context) {
 
     var tableName = "AirportBaggage-Bags";
 
-    dynamodb.query({
+    dynamodb.scan({
             "TableName": tableName,
-            "IndexName": "location-index",
-            "KeyConditions": {
-                "location": {
-                    "ComparisonOperator": "EQ",
-                    "AttributeValueList": [{"S": event.bag_location}]
-                }
-            },
-            "Select": "SPECIFIC_ATTRIBUTES",
-            "AttributesToGet": ["id", "location", "status"]
+            "Select": "COUNT",
         }, function(err, data) {
             if (err) {
                 context.fail('[ERROR] Query bag list: Dynamo failed: ' + err);
             } else {
                 console.log('Dynamo Success: ' + JSON.stringify(data, null, '  '));
-                context.succeed(JSON.stringify(data, null, '  '));
+                context.succeed('{\"table_size\":' + '\"' + data.Count + '"}');
             }
         });
-}
+};
