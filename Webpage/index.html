@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>AirBag - Incoming Bags</title>
 
-    <link rel="stylesheet" href="css/index_style.css">
+    <link rel="stylesheet" href="css/index_style.css"/>
+    <script type="text/javascript" src="js/get_info.js"></script>
 </head>
 <body>
 
@@ -14,10 +15,10 @@
 
 <aside>
     <h3>Quick Bag Statistics</h3>
-    <p>Total number: </p>
-    <p>Security zone: </p>
-    <p>Loading zone: </p>
-    <p>To aircraft: </p>
+    <p>Total number: <div id="total_bag_number"></div> </p>
+    <p>Security zone: <div id="sec2_number"></div> </p>
+    <p>Loading zone: <div id="loading_number"></div> </p>
+    <p>On aircraft: <div id="plane_number"></div></p>
 </aside>
 
 <section>
@@ -73,6 +74,7 @@
                   id="sec_check_2"></rect>
             <rect x="50" y="120" width="200" height="250"
                   id="text_box"></rect>
+            <!-- Use a div for this stuff? YES -->
         </g>
         <!-- Draw the loading area for bags -->
         <g id="loading_zone_area">
