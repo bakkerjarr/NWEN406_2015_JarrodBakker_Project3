@@ -23,15 +23,16 @@ from API.AirBagAPI import AirBagAPI
 
 class Bag:
 
-    _CONVEYOR_TIME_CHECK_IN_DECISION_POINT = 74  # units: s
-    _CONVEYOR_TIME_DECISION_POINT_EQUIP_AREA = 60  # units: s
-    _CONVEYOR_TIME_SECURITY_CHECK = 7.5  # units: s
+    _CONVEYOR_TIME_CHECK_IN_DECISION_POINT = 30 # original 74  # units: s
+    _CONVEYOR_TIME_DECISION_POINT_EQUIP_AREA = 24 # original 60  #
+    # units: s
+    _CONVEYOR_TIME_SECURITY_CHECK = 3 # original 7.5  # units: s
 
-    _PROB_FAIL_XRAY1 = 0.1
-    _PROB_FAIL_XRAY2 = 0.03
+    _PROB_FAIL_XRAY1 = 0.5  # original 0.1
+    _PROB_FAIL_XRAY2 = 0.8  # original 0.03
 
     _QUEUE_SERV_MU_EQUIP_AREA = 0.076
-    _QUEUE_SERV_MU_SECURITY_CHECK = 0.25
+    _QUEUE_SERV_MU_SECURITY_CHECK = 0.25  # original 0.25
 
     """
     Initialise a bag.
@@ -48,53 +49,6 @@ class Bag:
 
         AirBagAPI().bag_enter_system(self._bag_id, "check-in",
                                      "checked in",  "20")
-
-    """
-    Queue the bag for an additional security check.
-
-    :param security_check_queue - bags are queued here before
-                                  receiving the additional check.
-    """
-    def _security_check(self, security_check_queue):
-        print("[Bag "+self._bag_id+"] queued for security check.")
-        request = security_check_queue.request()
-        # TODO: queue size has changed so update the cloud [on service]
-
-        AirBagAPI().bag_update_loc_status(self._bag_id, "sec. scan 2",
-                                          "waiting for sec. scan 2")
-
-        yield request
-        service_time = self._random.expovariate(
-            self._QUEUE_SERV_MU_SECURITY_CHECK)
-        yield self._env.timeout(service_time)
-        security_check_queue.release(request)
-        # TODO: queue size has changed so update the cloud [off service]
-        print("[Bag "+self._bag_id+"] security check complete.")
-
-    """
-    Queue the bag in the equipment area so that it may be loaded onto
-    its appropriate plane.
-
-    :param equipment_area_queue - bags are queued here so that they
-                                  may be loaded onto their appropriate
-                                  planes.
-    """
-    def _equipment_area(self, equipment_area_queue):
-        print("[Bag "+self._bag_id+"] queued for loading.")
-        request = equipment_area_queue.request()
-        # TODO: queue size has changed so update the cloud [on equip]
-
-        AirBagAPI().bag_update_loc_status(self._bag_id, "loading bay",
-                                          "waiting for loading")
-        yield request
-        service_time = self._random.expovariate(
-            self._QUEUE_SERV_MU_EQUIP_AREA)
-        yield self._env.timeout(service_time)
-        equipment_area_queue.release(request)
-        # TODO: queue size has changed so update the cloud [off equip]
-        print("[Bag "+self._bag_id+"] en route to plane.")
-        AirBagAPI().bag_update_loc_status(self._bag_id, "plane",
-                                          "delivered to plane")
 
     """
     Process the bag in the simulation.
@@ -129,7 +83,20 @@ class Bag:
             yield(self._env.timeout(self._CONVEYOR_TIME_SECURITY_CHECK))
 
             # Queue the bag for scanning
-            self._env.process(self._security_check(security_check_queue))
+            print("[Bag "+self._bag_id+"] queued for security check.")
+            request = security_check_queue.request()
+            # TODO: queue size has changed so update the cloud [on service]
+
+            AirBagAPI().bag_update_loc_status(self._bag_id, "sec. scan 2",
+                                          "waiting for sec. scan 2")
+
+            yield request
+            service_time = self._random.expovariate(
+            self._QUEUE_SERV_MU_SECURITY_CHECK)
+            yield self._env.timeout(service_time)
+            security_check_queue.release(request)
+            # TODO: queue size has changed so update the cloud [off service]
+            print("[Bag "+self._bag_id+"] security check complete.")
 
             # Scan the bag
             prob = self._random.random()
@@ -149,8 +116,22 @@ class Bag:
 
         # Bag travels to the equipment area to be loaded onto a plane.
         AirBagAPI().bag_update_loc_status(self._bag_id, "conveyor",
-                                          "to loading bay")
+                                          "to loading-area")
         yield self._env.timeout(
             self._CONVEYOR_TIME_DECISION_POINT_EQUIP_AREA)
 
-        self._env.process(self._equipment_area(equipment_area_queue))
+        print("[Bag "+self._bag_id+"] queued for loading.")
+        request = equipment_area_queue.request()
+        # TODO: queue size has changed so update the cloud [on equip]
+
+        AirBagAPI().bag_update_loc_status(self._bag_id, "loading-area",
+                                          "waiting for loading")
+        yield request
+        service_time = self._random.expovariate(
+            self._QUEUE_SERV_MU_EQUIP_AREA)
+        yield self._env.timeout(service_time)
+        equipment_area_queue.release(request)
+        # TODO: queue size has changed so update the cloud [off equip]
+        print("[Bag "+self._bag_id+"] en route to plane.")
+        AirBagAPI().bag_update_loc_status(self._bag_id, "plane",
+                                          "delivered to plane")
