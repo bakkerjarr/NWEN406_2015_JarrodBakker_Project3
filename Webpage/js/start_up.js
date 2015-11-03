@@ -6,19 +6,20 @@ var sqs = new AWS.SQS({"apiVersion":'2012-11-05'});
 
 /* When the page loads, grab any existing data */
 get_total_bag_num();
+get_conveyor_bag_num()
 get_loading_bag_num();
 get_sec2_bag_num();
 get_plane_bag_number();
 
 /* Functions for receiving SQS messages */
 function sqs_subscribe(){
-    console.log("Subscribing to https://sqs.us-west-2.amazonaws.com/979829065790/AirBagInfoQueue");
+    //console.log("Subscribing to https://sqs.us-west-2.amazonaws.com/979829065790/AirBagInfoQueue");
     var params = {
         "QueueUrl": "https://sqs.us-west-2.amazonaws.com/979829065790/AirBagInfoQueue",
         "WaitTimeSeconds": 20
     };
     sqs.receiveMessage(params, function (err, data) {
-        console.log("Waiting for messages...");
+        //console.log("Waiting for messages...");
         if (err){
             console.log("Rcv msg err ", err);
             return
@@ -36,6 +37,13 @@ function process_data(data) {
 
     console.log("Recieved messages: ", message_body.Message);
 
+    if (message_body.Message == "DB UPDATED") {
+        get_total_bag_num();
+        get_conveyor_bag_num()
+        get_loading_bag_num();
+        get_sec2_bag_num();
+        get_plane_bag_number();
+    }
 
     var params = {
         "QueueUrl": "https://sqs.us-west-2.amazonaws.com/979829065790/AirBagInfoQueue",
@@ -43,10 +51,8 @@ function process_data(data) {
     };
 
     sqs.deleteMessage(params, function (err, data) {
-        if (err)
-            console.log(err, err.stack);
-        else
-            console.log("Message deleted successfully.")
+        if (err) console.log(err, err.stack);
+        //else console.log("Message deleted successfully.")
     });
 }
 

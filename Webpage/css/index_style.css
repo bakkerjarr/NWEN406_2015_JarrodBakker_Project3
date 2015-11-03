@@ -50,9 +50,15 @@ html * {
 }
 
 #text_box {
-    fill: transparent;
-    stroke: #000000;
-    stroke-width: 2;
+    height:300px;
+    width:600px;
+    background: #b3adb1; /* Just so we can see it */
+    position: absolute;
+    top: 320px;
+    left: 50%;  /* Put the left edge on the horizontal center */
+    margin-left: 18px; /* Move it 148px to the right of the horizontal center, placing it over the lightswitch */
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #text_check-in_counter {

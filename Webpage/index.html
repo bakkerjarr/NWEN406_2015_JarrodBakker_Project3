@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="css/index_style.css"/>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.2.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="js/get_info.js"></script>
     <script type="text/javascript" src="js/start_up.js"></script>
 </head>
@@ -35,54 +36,64 @@
         <line x1="300" y1="0" x2="300" y2="240" id="conveyor_line"></line>
         <line x1="200" y1="80" x2="300" y2="80" id="conveyor_line"></line>
         <!-- Draw the check-in counters -->
+        <text x="500" y="60" id="text_check-in_counter"
+              onclick="get_conveyor_bags()">Conveyor
+        </text>
         <g id="check-in_counter_1">
             <rect x="475" y="83" width="50" height="50"
                   id="check-in_counter"></rect>
-            <text x="480" y="112" id="text_check-in_counter">30</text>
+            <text x="480" y="112" id="text_check-in_counter">C1</text>
         </g>
         <g id="check-in_counter_2">
             <rect x="528" y="83" width="50" height="50"
                   id="check-in_counter"></rect>
-            <text x="533" y="112" id="text_check-in_counter">30</text>
+            <text x="533" y="112" id="text_check-in_counter">C2</text>
         </g>
         <g id="check-in_counter_3">
             <rect x="581" y="83" width="50" height="50"
                   id="check-in_counter"></rect>
-            <text x="586" y="112" id="text_check-in_counter">30</text>
+            <text x="586" y="112" id="text_check-in_counter">C3</text>
         </g>
         <g id="check-in_counter_4">
             <rect x="634" y="83" width="50" height="50"
                   id="check-in_counter"></rect>
-            <text x="639" y="112" id="text_check-in_counter">30</text>
+            <text x="639" y="112" id="text_check-in_counter">C4</text>
         </g>
         <g id="check-in_counter_5">
             <rect x="687" y="83" width="50" height="50"
                   id="check-in_counter"></rect>
-            <text x="692" y="112" id="text_check-in_counter">30</text>
+            <text x="692" y="112" id="text_check-in_counter">C5</text>
         </g>
         <g id="check-in_counter_6">
             <rect x="740" y="83" width="50" height="50"
                   id="check-in_counter"></rect>
-            <text x="745" y="112" id="text_check-in_counter">30</text>
+            <text x="745" y="112" id="text_check-in_counter">C6</text>
         </g>
         <g id="check-in_counter_7">
             <rect x="793" y="83" width="50" height="50"
                   id="check-in_counter"></rect>
-            <text x="798" y="112" id="text_check-in_counter">30</text>
-        </g>
-        <!-- Draw security check area 2 -->
-        <g id="sec_check_area_2">
-            <rect x="150" y="55" width="50" height="50"
-                  id="sec_check_2"></rect>
-            <rect x="50" y="120" width="200" height="250"
-                  id="text_box"></rect>
-            <!-- Use a div for this stuff? YES -->
+            <text x="798" y="112" id="text_check-in_counter">C7</text>
         </g>
         <!-- Draw the loading area for bags -->
         <g id="loading_zone_area">
             <rect x="275" y="240" width="50" height="50"
                   id="loading_zone"></rect>
+            <text x="240" y="312" id="text_check-in_counter"
+                  onclick="get_loading_bags()">Loading
+                Area
+            </text>
         </g>
+        <!-- Draw security check area 2 -->
+        <g id="sec_check_area_2">
+            <rect x="150" y="55" width="50" height="50"
+                  id="sec_check_2"></rect>
+            <text x="95" y="45" id="text_check-in_counter"
+                  onclick="get_sec2_bags()" >Security
+                Check 2
+            </text>
+        </g>
+        <!-- Use a div for this stuff? YES -->
+        <div id="text_box"></div>
     </svg>
 </section>
 
