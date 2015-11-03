@@ -1,5 +1,6 @@
 var bags_conveyor = [];
 var bags_loading = [];
+var bags_plane = [];
 var bags_sec2 = [];
 
 /* Functions to fetched information */
@@ -70,7 +71,7 @@ function get_conveyor_bag_num() {
              * The solution below is ugly but it works.
              */
             var resp = JSON.parse(eval("["+xhttp_conveyor.responseText+"]")[0]);
-            //document.getElementById("_number").innerHTML = resp.Count;
+            document.getElementById("conveyor_number").innerHTML = resp.Count;
             bags_conveyor = resp.Items;
         }
     };
@@ -90,6 +91,7 @@ function get_plane_bag_number() {
              */
             var resp = JSON.parse(eval("["+xhttp_plane.responseText+"]")[0]);
             document.getElementById("plane_number").innerHTML = resp.Count;
+            bags_plane = resp.Items;
         }
     };
     xhttp_plane.open("GET", "https://kxy0yszwcb.execute-api.us-west-2.amazonaws.com/ver1/baggagetracking/plane", true);
@@ -124,6 +126,24 @@ function get_loading_bags() {
     var str = "";
     for (key = 0; key < bags_loading.length; ++key){
         var bag = bags_loading[key];
+        var bag_str = "Bag id: " + JSON.stringify(bag.id.S)
+            + "&nbsp&nbsp&nbsp&nbsp Location: "
+            + JSON.stringify(bag.location.S)
+            + "&nbsp&nbsp&nbsp&nbsp Status: "
+            + JSON.stringify(bag.status.S);
+        str = str + bag_str + "<br/>";
+    }
+    text_box.innerHTML = str;
+}
+
+/* Output a list of the bags on planes */
+function get_plane_bags() {
+    var text_box = document.getElementById("text_box");
+    text_box.innerHTML = "";
+    var key;
+    var str = "";
+    for (key = 0; key < bags_plane.length; ++key){
+        var bag = bags_plane[key];
         var bag_str = "Bag id: " + JSON.stringify(bag.id.S)
             + "&nbsp&nbsp&nbsp&nbsp Location: "
             + JSON.stringify(bag.location.S)
