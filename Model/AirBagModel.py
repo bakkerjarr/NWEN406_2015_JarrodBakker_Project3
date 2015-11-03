@@ -53,7 +53,6 @@ class Model:
             self._check_in_counters.append(simpy.Resource(self._env))
         self._equipment_area_queue = simpy.Resource(self._env)
         self._security_check_queue = simpy.Resource(self._env)
-        # TODO: create queue object in server
 
     """
     Start the model.
@@ -86,10 +85,11 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    arrival_rate = 4
+    arrival_rate = 0.1  # original 4
     rand_seed = 999
     m = Model(arrival_rate, args.max_cust, args.num_check_in,
               rand_seed, args.time_factor)
+
     print("[!] Starting simulation.\n\tTotal number of customers: {0}"
           "\n\tNumber of check-in counters: {1}\n\tTime scaling "
           "factor: {2}\n").format(args.max_cust, args.num_check_in,

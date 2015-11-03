@@ -29,7 +29,7 @@ class Bag:
     _CONVEYOR_TIME_SECURITY_CHECK = 3 # original 7.5  # units: s
 
     _PROB_FAIL_XRAY1 = 0.5  # original 0.1
-    _PROB_FAIL_XRAY2 = 0.8  # original 0.03
+    _PROB_FAIL_XRAY2 = 0.5  # original 0.03
 
     _QUEUE_SERV_MU_EQUIP_AREA = 0.076
     _QUEUE_SERV_MU_SECURITY_CHECK = 0.25  # original 0.25
@@ -85,7 +85,6 @@ class Bag:
             # Queue the bag for scanning
             print("[Bag "+self._bag_id+"] queued for security check.")
             request = security_check_queue.request()
-            # TODO: queue size has changed so update the cloud [on service]
 
             AirBagAPI().bag_update_loc_status(self._bag_id, "sec. scan 2",
                                           "waiting for sec. scan 2")
@@ -95,7 +94,6 @@ class Bag:
             self._QUEUE_SERV_MU_SECURITY_CHECK)
             yield self._env.timeout(service_time)
             security_check_queue.release(request)
-            # TODO: queue size has changed so update the cloud [off service]
             print("[Bag "+self._bag_id+"] security check complete.")
 
             # Scan the bag
@@ -122,7 +120,6 @@ class Bag:
 
         print("[Bag "+self._bag_id+"] queued for loading.")
         request = equipment_area_queue.request()
-        # TODO: queue size has changed so update the cloud [on equip]
 
         AirBagAPI().bag_update_loc_status(self._bag_id, "loading-area",
                                           "waiting for loading")
@@ -131,7 +128,6 @@ class Bag:
             self._QUEUE_SERV_MU_EQUIP_AREA)
         yield self._env.timeout(service_time)
         equipment_area_queue.release(request)
-        # TODO: queue size has changed so update the cloud [off equip]
         print("[Bag "+self._bag_id+"] en route to plane.")
         AirBagAPI().bag_update_loc_status(self._bag_id, "plane",
                                           "delivered to plane")

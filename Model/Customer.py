@@ -43,7 +43,8 @@ class Customer:
     dependent on the number of bags that a customer is checking in.
     """
     def _service_time(self):
-        return 30 + 15*self._num_bags
+        # return 30 + 15*self._num_bags  # original
+        return 10 + 5*self._num_bags
 
     """
     Process the customer in the simulation.
@@ -74,12 +75,10 @@ class Customer:
         # Customer arrives at queue for service
         service_time = self._service_time()
         request = chosen_counter.request()
-        # TODO: queue size has changed so update the cloud [on check-in]
         yield request
         yield self._env.timeout(service_time)
         chosen_counter.release(request)
         time_serv = self._env.now
-        # TODO: queue size has changed so update the cloud [off check-in]
         print("[Customer {0}]\tFinished serving: {1:.4f}s").format(
             self._cust_id, time_serv)
         # The customer has been served and their bags (if any exist) are
