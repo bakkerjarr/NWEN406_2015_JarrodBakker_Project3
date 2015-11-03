@@ -1,0 +1,13 @@
+python Model/AirBagModel.py 1000 -s 1
+
+Customer arrival_rate = 4
+
+Total number:85
+On conveyor:19
+Security zone:25
+Loading zone:28
+On aircraft:13
+
+Stats taken across all lambda functions.
+
+https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#metrics:graph=!AX7!ET1!MN8~6~5!NS3-3!PD2-3!SS4-3!ST0!VA2015-11-03T14%253A30%253A00Z~2015-11-03T14%253A35%253A00Z~60~AWS%252FLambda~Average~Duration~Invocations~RIGHT~Throttles
