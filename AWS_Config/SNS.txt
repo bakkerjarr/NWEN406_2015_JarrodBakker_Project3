@@ -1,9 +1,15 @@
+Topics
+======
+
 Topic: AirBagInfo
 Region: us-west-2
 Protocol: sqs
 
-###########################
 Topic: dynamodb
 Region: us-west-2
 Protocol: email
 (Used for DynamoDB warning)
+
+Subscriptions
+=============
+Subscriptions must be made to map the SNS topics to their appropriate SQS queues.
