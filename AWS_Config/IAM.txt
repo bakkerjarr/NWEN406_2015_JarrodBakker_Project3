@@ -1,0 +1,71 @@
+Users
+=====
+Client_User
+No password
+Path: /
+
+Policy actions:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1446511870000",
+            "Effect": "Allow",
+            "Action": [
+                "sqs:DeleteMessage",
+                "sqs:ReceiveMessage"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+
+Needs an SQS access key for AirBagInfoQueue
+
+Access Advisor service name: Amazon SQS
+
+
+
+Roles
+=====
+lambda_dynamo
+Path: /
+
+Policy actions:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1428341300017",
+            "Action": [
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeStream",
+                "dynamodb:GetItem",
+                "dynamodb:GetShardIterator",
+                "dynamodb:GetRecords",
+                "dynamodb:ListStreams",
+                "dynamodb:PutItem",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:UpdateItem",
+                "sns:Publish"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Sid": "",
+            "Resource": "*",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Effect": "Allow"
+        }
+    ]
+}
+
+Access Advisor service names: Amazon SNS, Amazon DynamoDB, Amazon CloudWatch Logs

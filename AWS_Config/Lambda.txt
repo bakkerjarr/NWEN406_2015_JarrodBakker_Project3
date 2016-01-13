@@ -1,0 +1,9 @@
+See code for implementation.
+
+Each function
+=============
+Runtime: NodeJS
+Handler: index.handler
+Role: lambda_dynamo
+Memory: 128MB
+Timeout: 3s

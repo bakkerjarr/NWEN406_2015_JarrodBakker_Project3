@@ -1,0 +1,268 @@
+No authorisation or API key needed for any of the resources.
+
+Structure
+=========
+/
+    /baggagetracking
+        /sec-area-2
+            GET
+            /failed
+                GET
+        /conveyor
+            GET
+        /bags
+            POST
+            PUT
+        /plane
+            GET
+        /loading-area
+            GET
+        /system
+            GET
+
+Breakdown
+=========
+/sec-area-2 GET
+
+Integration Request
+-------------------
+Type: Lambda
+Lambda function: queryBagsList
+Mapping templates:
+    Content-Type: application/json
+    Template: {"bag_location":"sec. scan 2"}
+
+Integration Response
+--------------------
+Method response status: 200
+Default mapping: Yes
+Header Mappings:
+    Response header                 Mapping value
+    ---------------                 -------------
+    Access-Control-Allow-Headers    'Content-Type,X-Amz-Date,Authorization'
+    Access-Control-Allow-Methods    'GET'
+    Access-Control-Allow-Origin     '*'
+Mapping templates:
+    Content-Type: application/json (Output passthrough)
+
+Method Response
+---------------
+HTTP Status: 200
+Response Headers for 200:
+    Name: Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin
+Response Models for 200:
+    Content type: application/json
+    Models: Empty
+    
+    
+
+/failed GET
+
+Integration Request
+-------------------
+Type: Lambda
+Lambda function: queryBagsCount
+Mapping templates:
+    Content-Type: application/json
+    Template: {"bag_location":"failed sec. scan 2"}
+
+Integration Response
+--------------------
+Method response status: 200
+Default mapping: Yes
+Header Mappings:
+    Response header                 Mapping value
+    ---------------                 -------------
+    Access-Control-Allow-Headers    'Content-Type,X-Amz-Date,Authorization'
+    Access-Control-Allow-Methods    'GET'
+    Access-Control-Allow-Origin     '*'
+Mapping templates:
+    Content-Type: application/json (Output passthrough)
+
+Method Response
+---------------
+HTTP Status: 200
+Response Headers for 200:
+    Name: Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin
+Response Models for 200:
+    Content type: application/json
+    Models: Empty
+    
+    
+    
+/conveyor GET
+
+Integration Request
+-------------------
+Type: Lambda
+Lambda function: queryBagsList
+Mapping templates:
+    Content-Type: application/json
+    Template: {"bag_location":"conveyor"}
+
+Integration Response
+--------------------
+Method response status: 200
+Default mapping: Yes
+Header Mappings:
+    Response header                 Mapping value
+    ---------------                 -------------
+    Access-Control-Allow-Headers    'Content-Type,X-Amz-Date,Authorization'
+    Access-Control-Allow-Methods    'GET'
+    Access-Control-Allow-Origin     '*'
+Mapping templates:
+    Content-Type: application/json (Output passthrough)
+
+Method Response
+---------------
+HTTP Status: 200
+Response Headers for 200:
+    Name: Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin
+Response Models for 200:
+    Content type: application/json
+    Models: Empty
+
+
+    
+/bags POST
+
+Integration Request
+-------------------
+Type: Lambda
+Lambda function: createBag
+
+Integration Response
+--------------------
+Method response status: 200
+Default mapping: Yes
+Mapping templates:
+    Content-Type: application/json (Output passthrough)
+
+Method Response
+---------------
+HTTP Status: 200
+Response Models for 200:
+    Content type: application/json
+    Models: Empty
+    
+
+
+/bags PUT
+
+Integration Request
+-------------------
+Type: Lambda
+Lambda function: updateBag
+
+Integration Response
+--------------------
+Method response status: 200
+Default mapping: Yes
+Mapping templates:
+    Content-Type: application/json (Output passthrough)
+
+Method Response
+---------------
+HTTP Status: 200
+Response Models for 200:
+    Content type: application/json
+    Models: Empty
+
+
+    
+/plane GET
+
+Integration Request
+-------------------
+Type: Lambda
+Lambda function: queryBagsList
+Mapping templates:
+    Content-Type: application/json
+    Template: {"bag_location":"plane"}
+
+Integration Response
+--------------------
+Method response status: 200
+Default mapping: Yes
+Header Mappings:
+    Response header                 Mapping value
+    ---------------                 -------------
+    Access-Control-Allow-Headers    'Content-Type,X-Amz-Date,Authorization'
+    Access-Control-Allow-Methods    'GET'
+    Access-Control-Allow-Origin     '*'
+Mapping templates:
+    Content-Type: application/json (Output passthrough)
+
+Method Response
+---------------
+HTTP Status: 200
+Response Headers for 200:
+    Name: Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin
+Response Models for 200:
+    Content type: application/json
+    Models: Empty
+    
+    
+    
+/loading-area GET
+
+Integration Request
+-------------------
+Type: Lambda
+Lambda function: queryBagsList
+Mapping templates:
+    Content-Type: application/json
+    Template: {"bag_location":"loading-area"}
+
+Integration Response
+--------------------
+Method response status: 200
+Default mapping: Yes
+Header Mappings:
+    Response header                 Mapping value
+    ---------------                 -------------
+    Access-Control-Allow-Headers    'Content-Type,X-Amz-Date,Authorization'
+    Access-Control-Allow-Methods    'GET'
+    Access-Control-Allow-Origin     '*'
+Mapping templates:
+    Content-Type: application/json (Output passthrough)
+
+Method Response
+---------------
+HTTP Status: 200
+Response Headers for 200:
+    Name: Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin
+Response Models for 200:
+    Content type: application/json
+    Models: Empty
+    
+    
+    
+/system GET
+
+Integration Request
+-------------------
+Type: Lambda
+Lambda function: queryBagTableSize
+
+Integration Response
+--------------------
+Method response status: 200
+Default mapping: Yes
+Header Mappings:
+    Response header                 Mapping value
+    ---------------                 -------------
+    Access-Control-Allow-Headers    'Content-Type,X-Amz-Date,Authorization'
+    Access-Control-Allow-Methods    'GET'
+    Access-Control-Allow-Origin     '*'
+Mapping templates:
+    Content-Type: application/json (Output passthrough)
+
+Method Response
+---------------
+HTTP Status: 200
+Response Headers for 200:
+    Name: Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin
+Response Models for 200:
+    Content type: application/json
+    Models: Empty

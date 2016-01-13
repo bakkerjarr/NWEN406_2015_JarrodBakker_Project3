@@ -1,0 +1,13 @@
+Name:	AirBagInfoQueue
+Default Visibility Timeout: 30 seconds
+Message Retention Period: 5 minutes
+Maximum Message Size: 256 KB
+Receive Message Wait Time: 20 seconds
+Messages Available (Visible): 0
+Delivery Delay: 0 seconds
+
+Permissions
+===========
+Effect  Principals      Actions         Conditions
+------  ----------      -------         ----------
+Allow   Everybody(*)    SQS:SendMessage ArnEquals: (ARN of the AirBagInfo SNS topic)
